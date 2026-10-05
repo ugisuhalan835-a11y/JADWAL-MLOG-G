@@ -614,11 +614,34 @@
             db.ref("appData_26G").set(appData);
         }
 
-        function formatWALink(phoneNum, matkulName) {
+        /* FUNGSI PESAN OTOMATIS CHAT WA UNTUK SEMUA DOSEN & MATKUL */
+        function formatWALink(phoneNum, matkulName, dosenName, jamMulai, jamSelesai) {
             if (!phoneNum) return "#";
             let clean = phoneNum.replace(/[^0-9]/g, '');
             if (clean.startsWith("0")) clean = "62" + clean.slice(1);
-            const textMsg = encodeURIComponent(`Permisi Bapak/Ibu Dosen, saya mahasiswa S1 Manajemen Logistik 26G ingin bertanya terkait ${matkulName}...`);
+
+            // Tentukan sapaan waktu otomatis (Pagi/Siang/Sore/Malam)
+            const hour = new Date().getHours();
+            let sapaanWaktu = "Selamat pagi";
+            if (hour >= 11 && hour < 15) {
+                sapaanWaktu = "Selamat siang";
+            } else if (hour >= 15 && hour < 18) {
+                sapaanWaktu = "Selamat sore";
+            } else if (hour >= 18 || hour < 4) {
+                sapaanWaktu = "Selamat malam";
+            }
+
+            // Tentukan panggilan Bapak/Ibu Dosen
+            const panggilanDosen = "Bapak/Ibu";
+
+            // Format Jam Perkuliahan (misal: 07.00–09.30 WIB)
+            const jamFormatted = `${jamMulai.replace(':', '.')}–${jamSelesai.replace(':', '.')} WIB`;
+
+            // Template Pesan Dosen Dinamis
+            const namaDosenStr = dosenName ? ` ${dosenName}` : '';
+            const pesanRaw = `${sapaanWaktu}, ${panggilanDosen}${namaDosenStr}. Mohon izin mengingatkan bahwa besok terdapat jadwal perkuliahan ${matkulName} untuk kelas 26 G Manajemen Logistik, pukul ${jamFormatted}.\n\nSaya Ugi Suhalan (NIM 26B505041238) selaku komti kelas G. Terima kasih, ${panggilanDosen}`;
+
+            const textMsg = encodeURIComponent(pesanRaw);
             return `https://wa.me/${clean}?text=${textMsg}`;
         }
 
@@ -708,7 +731,7 @@
                         <div class="detail-item"><i class="fa-solid fa-location-dot"></i> <span>Ruang ${item.ruang}</span></div>
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        ${item.noDosen ? `<a href="${formatWALink(item.noDosen, item.matkul)}" target="_blank" class="btn-sm btn-wa"><i class="fa-brands fa-whatsapp"></i> Chat WA</a>` : '<span></span>'}
+                        ${item.noDosen ? `<a href="${formatWALink(item.noDosen, item.matkul, item.dosen, item.jamMulai, item.jamSelesai)}" target="_blank" class="btn-sm btn-wa"><i class="fa-brands fa-whatsapp"></i> Chat WA</a>` : '<span></span>'}
                         <button class="btn-sm btn-danger" onclick="deleteJadwal('${item.id}')"><i class="fa-solid fa-trash"></i> Hapus</button>
                     </div>
                 </div>
