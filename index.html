@@ -3,115 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal & Presensi Pengurus - S1 Manajemen Logistik 26G</title>
-    <!-- Font & Icons -->
+    <title>Jadwal Kuliah & Planner - S1 Manajemen Logistik 26G</title>
+    <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- SDK Firebase -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
         :root {
-            --primary: #4F46E5;
-            --primary-hover: #4338CA;
-            --primary-light: #EEF2FF;
+            --primary: #6366F1;
+            --primary-gradient: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            --accent: #EC4899;
             --bg-body: #F8FAFC;
             --bg-card: #FFFFFF;
             --bg-sidebar: #FFFFFF;
             --text-main: #0F172A;
             --text-muted: #64748B;
             --border-color: #E2E8F0;
-            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
-            --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
-            --radius-sm: 10px;
-            --radius-md: 16px;
+            --shadow-sm: 0 2px 8px rgba(99, 102, 241, 0.05);
+            --shadow-md: 0 8px 24px -4px rgba(99, 102, 241, 0.12);
+            --radius-sm: 12px;
+            --radius-md: 18px;
             --radius-lg: 24px;
             --danger: #EF4444;
             --success: #10B981;
             --warning: #F59E0B;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body.dark-mode {
+            --bg-body: #0B0F19;
+            --bg-card: #151D2A;
+            --bg-sidebar: #151D2A;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: #263346;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
         body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; }
 
         /* SIDEBAR */
         .sidebar {
-            width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
-            display: flex; flex-direction: column; padding: 24px 16px; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100;
+            width: 270px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
+            display: flex; flex-direction: column; padding: 28px 18px; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100;
         }
 
-        .brand { display: flex; align-items: center; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
-        .brand-icon { width: 40px; height: 40px; background: var(--primary); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
+        .brand { display: flex; align-items: center; gap: 14px; padding-bottom: 24px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; }
+        .brand-icon { width: 44px; height: 44px; background: var(--primary-gradient); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
 
-        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .nav-item button {
-            width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: none;
-            background: transparent; color: var(--text-muted); font-size: 14px; font-weight: 600;
+            width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: none;
+            background: transparent; color: var(--text-muted); font-size: 14px; font-weight: 700;
             border-radius: var(--radius-sm); cursor: pointer; text-align: left; transition: all 0.2s;
         }
-        .nav-item.active button { background-color: var(--primary); color: white; }
+        .nav-item.active button { background: var(--primary-gradient); color: white; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35); }
+        .nav-item button:hover:not(.active) { background-color: rgba(99, 102, 241, 0.08); color: var(--primary); }
 
         /* MAIN CONTENT */
-        .main-wrapper { margin-left: 260px; flex: 1; padding: 28px 32px; width: calc(100% - 260px); }
-        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .main-wrapper { margin-left: 270px; flex: 1; padding: 32px 36px; width: calc(100% - 270px); }
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
 
         .tab-page { display: none; }
-        .tab-page.active { display: block; }
+        .tab-page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
-        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* BENTO CARDS */
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .card-title { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+
         .form-group { margin-bottom: 16px; text-align: left; }
         .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
-        .form-control { width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); font-size: 14px; outline: none; }
+        .form-control { width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); font-size: 14px; outline: none; }
+        .form-control:focus { border-color: var(--primary); }
 
-        .btn-primary { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-danger { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+        .btn-primary { background: var(--primary-gradient); color: white; border: none; padding: 12px 20px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25); }
+        .btn-primary:hover { opacity: 0.95; transform: translateY(-1px); }
+        .btn-danger { background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
-        th { font-weight: 700; color: var(--text-muted); background: var(--bg-body); }
+        /* JADWAL GRID */
+        .schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+        .schedule-card { background: var(--bg-card); border: 1px solid var(--border-color); border-left: 5px solid var(--primary); border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-sm); }
+        .schedule-day { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 0.5px; margin-bottom: 6px; }
+        .schedule-subject { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+        .schedule-meta { font-size: 13px; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px; }
 
-        .badge-status { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
-        .badge-Hadir { background: rgba(16,185,129,0.15); color: var(--success); }
-        .badge-Izin { background: rgba(245,158,11,0.15); color: var(--warning); }
-        .badge-Sakit { background: rgba(239,68,68,0.15); color: var(--danger); }
+        /* TO-DO ITEMS */
+        .todo-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--bg-body); border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid var(--border-color); }
+        .todo-item.done span { text-decoration: line-through; color: var(--text-muted); }
 
-        /* MODAL POPUP LOGIN PENGURUS */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
-            display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-card { background: var(--bg-card); width: 100%; max-width: 380px; padding: 28px; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--shadow-md); }
+        /* DARK MODE BUTTON */
+        .theme-toggle { background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 16px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 8px; }
 
         @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .main-wrapper { margin-left: 0; width: 100%; padding: 16px; }
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border-color); padding: 16px; }
+            .main-wrapper { margin-left: 0; width: 100%; padding: 20px 16px; }
+            .nav-list { flex-direction: row; overflow-x: auto; padding-bottom: 8px; }
+            .nav-item button { white-space: nowrap; font-size: 13px; padding: 10px 14px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR NAVIGASI -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+            <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
             <div>
-                <h1 style="font-size: 15px; font-weight: 800;">LOGISTICS PLANNER</h1>
-                <p style="font-size: 11px; color: var(--text-muted);">ITL Trisakti • 26G</p>
+                <h1 style="font-size: 16px; font-weight: 800;">MLOG PLANNER</h1>
+                <p style="font-size: 11px; color: var(--text-muted);">ITL Trisakti • Kelas 26G</p>
             </div>
         </div>
 
         <ul class="nav-list">
             <li class="nav-item active" data-tab="tab-jadwal">
-                <button><i class="fa-solid fa-calendar-days"></i> Jadwal Kuliah</button>
+                <button><i class="fa-solid fa-calendar-week"></i> Jadwal Kuliah</button>
             </li>
-            <li class="nav-item" data-tab="tab-absen">
-                <button><i class="fa-solid fa-user-shield"></i> Presensi Pengurus <i class="fa-solid fa-lock" style="font-size: 11px; margin-left: auto;"></i></button>
+            <li class="nav-item" data-tab="tab-tugas">
+                <button><i class="fa-solid fa-list-check"></i> Task / Tugas</button>
+            </li>
+            <li class="nav-item" data-tab="tab-catatan">
+                <button><i class="fa-solid fa-bullhorn"></i> Info & Catatan</button>
+            </li>
+            <li class="nav-item" data-tab="tab-ipk">
+                <button><i class="fa-solid fa-calculator"></i> Kalkulator IPK</button>
             </li>
         </ul>
     </aside>
@@ -120,100 +145,82 @@
     <main class="main-wrapper">
         <header class="top-header">
             <div>
-                <h2 style="font-size: 20px; font-weight: 800;">Portal MLOG 26G</h2>
-                <p style="font-size: 12px; color: var(--text-muted);">Sistem Informasi Perkuliahan & Absensi</p>
+                <h2 style="font-size: 22px; font-weight: 800;">Dashboard Kelas 26G 🚀</h2>
+                <p style="font-size: 13px; color: var(--text-muted);">S1 Manajemen Logistik • Akses Publik Realtime</p>
             </div>
-            <div id="userStatusBadge" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Mode: Mahasiswa (Publik)</div>
+            <button class="theme-toggle" onclick="toggleDarkMode()">
+                <i class="fa-solid fa-moon"></i> <span id="themeLabel">Mode Gelap</span>
+            </button>
         </header>
 
-        <!-- TAB 1: JADWAL KULIAH (LANGSUNG DILIHAT MAHASISWA) -->
+        <!-- TAB 1: JADWAL KULIAH -->
         <section id="tab-jadwal" class="tab-page active">
-            <div class="card">
-                <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;"><i class="fa-solid fa-calendar-days"></i> Daftar Mata Kuliah Kelas 26G</h3>
-                <div id="jadwalList"></div>
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa-solid fa-clock" style="color:var(--primary);"></i> Jadwal MLOG 26G</h3>
             </div>
+            <div class="schedule-grid" id="scheduleContainer"></div>
         </section>
 
-        <!-- TAB 2: ABSENSI (KHUSUS PENGURUS & KETUA KELAS) -->
-        <section id="tab-absen" class="tab-page">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 style="font-size: 16px; font-weight: 800;"><i class="fa-solid fa-pen-to-square"></i> Fitur Presensi (Khusus Pengurus)</h3>
-                <button onclick="handleLogoutPengurus()" class="btn-danger" style="font-size: 12px;"><i class="fa-solid fa-right-from-bracket"></i> Keluar Sesi Pengurus</button>
-            </div>
-
+        <!-- TAB 2: TASK / TUGAS -->
+        <section id="tab-tugas" class="tab-page">
             <div class="card">
-                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Input Kehadiran Mahasiswa</h4>
-                <form onsubmit="submitAbsen(event)">
+                <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-plus" style="color:var(--primary);"></i> Tambah Tugas Baru</h3>
+                <form onsubmit="addTask(event)">
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
                         <div class="form-group">
-                            <label>Nama Mahasiswa</label>
-                            <input type="text" id="absenNama" class="form-control" placeholder="Nama Mahasiswa" required>
+                            <label>Nama Tugas / Matkul</label>
+                            <input type="text" id="taskTitle" class="form-control" placeholder="Contoh: Tugas MatEko Bab 3" required>
                         </div>
                         <div class="form-group">
-                            <label>Mata Kuliah</label>
-                            <select id="absenMatkul" class="form-control" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Status Kehadiran</label>
-                            <select id="absenStatus" class="form-control" required>
-                                <option value="Hadir">Hadir</option>
-                                <option value="Izin">Izin</option>
-                                <option value="Sakit">Sakit</option>
-                            </select>
+                            <label>Deadline Tanggal</label>
+                            <input type="date" id="taskDeadline" class="form-control" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary" style="margin-top: 8px;"><i class="fa-solid fa-paper-plane"></i> Simpan Presensi</button>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-plus"></i> Simpan Tugas</button>
                 </form>
             </div>
 
             <div class="card">
-                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Rekap Presensi Kelas (Realtime Cloud)</h4>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Waktu / Tanggal</th>
-                                <th>Nama Mahasiswa</th>
-                                <th>Mata Kuliah</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableAbsenBody">
-                            <tr><td colspan="5" style="text-align:center;">Memuat data absensi...</td></tr>
-                        </tbody>
-                    </table>
+                <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-tasks" style="color:var(--primary);"></i> Daftar Tugas Kelas (Realtime)</h3>
+                <div id="todoContainer">
+                    <p style="text-align:center; color:var(--text-muted);">Memuat tugas...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: INFO & CATATAN -->
+        <section id="tab-catatan" class="tab-page">
+            <div class="card">
+                <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-paper-plane" style="color:var(--primary);"></i> Buat Pengumuman / Catatan</h3>
+                <form onsubmit="addNote(event)">
+                    <div class="form-group">
+                        <label>Judul / Isu</label>
+                        <input type="text" id="noteTitle" class="form-control" placeholder="Judul Pengumuman" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Isi Catatan / Link Materi</label>
+                        <textarea id="noteBody" class="form-control" rows="3" placeholder="Tulis info penting di sini..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-bullhorn"></i> Posting Info</button>
+                </form>
+            </div>
+
+            <div id="notesContainer"></div>
+        </section>
+
+        <!-- TAB 4: KALKULATOR IPK -->
+        <section id="tab-ipk" class="tab-page">
+            <div class="card">
+                <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-calculator" style="color:var(--primary);"></i> Simulasi IPK Semester</h3>
+                <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Hitung estimasi nilai IPK dengan memasukkan target nilai matkulmu.</p>
+                <div id="ipkCalcContainer"></div>
+                <div style="margin-top:20px; padding:16px; background:var(--bg-body); border-radius:var(--radius-sm); text-align:center;">
+                    <h4 style="font-size:14px; color:var(--text-muted);">Estimasi IPK Kamu:</h4>
+                    <span id="ipkResult" style="font-size:32px; font-weight:800; color:var(--primary);">4.00</span>
                 </div>
             </div>
         </section>
     </main>
-
-    <!-- MODAL POPUP LOGIN KETUA / PENGURUS -->
-    <div class="modal-overlay" id="modalLoginPengurus">
-        <div class="modal-card">
-            <div class="brand-icon" style="margin: 0 auto 12px auto; width: 46px; height: 46px; font-size: 20px;">
-                <i class="fa-solid fa-user-shield"></i>
-            </div>
-            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">Akses Khusus Pengurus</h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Hanya Ketua Kelas & Pengurus yang dapat mengakses fitur presensi.</p>
-            
-            <form onsubmit="handleLoginPengurus(event)">
-                <div class="form-group">
-                    <label>Username Pengurus</label>
-                    <input type="text" id="loginUser" class="form-control" placeholder="Username" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPass" class="form-control" placeholder="Password" required>
-                </div>
-                <p id="loginError" style="color: var(--danger); font-size: 12px; display: none; margin-bottom: 12px;">Username/Password Pengurus Salah!</p>
-                <div style="display: flex; gap: 8px;">
-                    <button type="button" onclick="cancelLoginPengurus()" class="btn-primary" style="background: var(--text-muted); width: 50%; justify-content: center;">Kembali</button>
-                    <button type="submit" class="btn-primary" style="width: 50%; justify-content: center;">Verifikasi</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <script>
         /* CONFIG FIREBASE */
@@ -230,150 +237,169 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        /* KREDENSIAL LOGIN KHUSUS KETUA & PENGURUS */
-        const PENGURUS_CREDENTIALS = {
-            "ugi": "26glogistik",   // Username Ketua Kelas
-            "admin": "mlog2026"     // Username Pengurus Kelas
-        };
-
-        const DEFAULT_MATKUL = [
-            "Pengantar Bisnis dan Inovasi",
-            "Pengantar Akuntansi",
-            "Pengantar Transportasi",
-            "Pendidikan Pancasila",
-            "Matematika Ekonomi",
-            "Ekonomi Mikro",
-            "Prinsip-prinsip Manajemen",
-            "Pengantar Logistik"
+        /* DATA JADWAL UTAMA */
+        const JADWAL_DATA = [
+            { hari: "Senin", jam: "08:00 - 10:30 WIB", matkul: "Pengantar Bisnis dan Inovasi", sks: 3, dosen: "Dosen Pengampu", ruang: "R.302" },
+            { hari: "Senin", jam: "10:45 - 13:15 WIB", matkul: "Pengantar Akuntansi", sks: 3, dosen: "Dosen Pengampu", ruang: "R.302" },
+            { hari: "Selasa", jam: "08:00 - 10:30 WIB", matkul: "Pengantar Transportasi", sks: 3, dosen: "Dosen Pengampu", ruang: "R.304" },
+            { hari: "Selasa", jam: "10:45 - 12:25 WIB", matkul: "Pendidikan Pancasila", sks: 2, dosen: "Dosen Pengampu", ruang: "R.304" },
+            { hari: "Rabu", jam: "08:00 - 10:30 WIB", matkul: "Matematika Ekonomi", sks: 3, dosen: "Dosen Pengampu", ruang: "Lab Komputer" },
+            { hari: "Kamis", jam: "08:00 - 10:30 WIB", matkul: "Ekonomi Mikro", sks: 3, dosen: "Dosen Pengampu", ruang: "R.301" },
+            { hari: "Jumat", jam: "08:00 - 10:30 WIB", matkul: "Prinsip-prinsip Manajemen", sks: 3, dosen: "Dosen Pengampu", ruang: "R.305" },
+            { hari: "Jumat", jam: "13:30 - 16:00 WIB", matkul: "Pengantar Logistik", sks: 3, dosen: "Dosen Pengampu", ruang: "R.305" }
         ];
 
-        /* AKSED DAN NAVIGASI */
+        /* NAVIGASI TAB */
         document.querySelectorAll(".nav-item button").forEach(btn => {
             btn.addEventListener("click", function() {
                 const target = this.parentElement.getAttribute("data-tab");
-
-                if (target === "tab-absen") {
-                    const isPengurusLoggedIn = sessionStorage.getItem("pengurus_logged_user");
-                    if (!isPengurusLoggedIn) {
-                        document.getElementById("modalLoginPengurus").classList.add("active");
-                        return;
-                    }
-                }
-
-                switchTab(target);
+                document.querySelectorAll(".nav-item, .tab-page").forEach(el => el.classList.remove("active"));
+                this.parentElement.classList.add("active");
+                document.getElementById(target).classList.add("active");
             });
         });
 
-        function switchTab(target) {
-            document.querySelectorAll(".nav-item, .tab-page").forEach(el => el.classList.remove("active"));
-            document.querySelector(`[data-tab="${target}"]`).classList.add("active");
-            document.getElementById(target).classList.add("active");
-
-            const loggedUser = sessionStorage.getItem("pengurus_logged_user");
-            document.getElementById("userStatusBadge").innerText = loggedUser ? `Sesi Pengurus: ${loggedUser}` : "Mode: Mahasiswa (Publik)";
-        }
-
-        /* LOGIN LOGIC PENGURUS */
-        function handleLoginPengurus(e) {
-            e.preventDefault();
-            const u = document.getElementById("loginUser").value.trim();
-            const p = document.getElementById("loginPass").value.trim();
-
-            if (PENGURUS_CREDENTIALS[u] && PENGURUS_CREDENTIALS[u] === p) {
-                sessionStorage.setItem("pengurus_logged_user", u);
-                document.getElementById("loginError").style.display = "none";
-                document.getElementById("modalLoginPengurus").classList.remove("active");
-                switchTab("tab-absen");
-            } else {
-                document.getElementById("loginError").style.display = "block";
-            }
-        }
-
-        function cancelLoginPengurus() {
-            document.getElementById("modalLoginPengurus").classList.remove("active");
-            document.getElementById("loginError").style.display = "none";
-        }
-
-        function handleLogoutPengurus() {
-            sessionStorage.removeItem("pengurus_logged_user");
-            switchTab("tab-jadwal");
-            alert("Keluar dari sesi Pengurus.");
-        }
-
-        /* INTEGRASI DATABASE REALTIME ABSENSI */
-        function initApp() {
-            populateMatkulOptions();
-            renderJadwalView();
-
-            db.ref("absensi_26G").on("value", (snapshot) => {
-                renderAbsenTable(snapshot.val());
-            });
-        }
-
-        function populateMatkulOptions() {
-            const select = document.getElementById("absenMatkul");
-            select.innerHTML = DEFAULT_MATKUL.map(m => `<option value="${m}">${m}</option>`).join('');
-        }
-
-        function submitAbsen(e) {
-            e.preventDefault();
-            const nama = document.getElementById("absenNama").value.trim();
-            const matkul = document.getElementById("absenMatkul").value;
-            const status = document.getElementById("absenStatus").value;
-
-            const now = new Date();
-            const timeStr = `${now.toLocaleDateString('id-ID')} - ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} WIB`;
-
-            const newAbsenRef = db.ref("absensi_26G").push();
-            newAbsenRef.set({
-                id: newAbsenRef.key,
-                waktu: timeStr,
-                nama: nama,
-                matkul: matkul,
-                status: status
-            }, (error) => {
-                if (!error) {
-                    alert("Presensi berhasil disimpan!");
-                    document.getElementById("absenNama").value = "";
-                }
-            });
-        }
-
-        function deleteAbsen(id) {
-            if (confirm("Hapus catatan presensi ini?")) {
-                db.ref("absensi_26G/" + id).remove();
-            }
-        }
-
-        function renderAbsenTable(data) {
-            const tbody = document.getElementById("tableAbsenBody");
-            if (!data) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Belum ada data presensi terisi.</td></tr>`;
-                return;
-            }
-
-            const list = Object.values(data).reverse();
-            tbody.innerHTML = list.map(item => `
-                <tr>
-                    <td>${item.waktu}</td>
-                    <td><strong>${item.nama}</strong></td>
-                    <td>${item.matkul}</td>
-                    <td><span class="badge-status badge-${item.status}">${item.status}</span></td>
-                    <td><button class="btn-danger" onclick="deleteAbsen('${item.id}')"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>
-            `).join('');
-        }
-
-        function renderJadwalView() {
-            const container = document.getElementById("jadwalList");
-            container.innerHTML = DEFAULT_MATKUL.map(m => `
-                <div style="padding: 12px; background: var(--bg-body); border-radius: 8px; margin-bottom: 8px; font-weight: 700; font-size: 14px;">
-                    <i class="fa-solid fa-book" style="color: var(--primary); margin-right: 8px;"></i> ${m}
+        /* RENDER JADWAL */
+        function renderSchedule() {
+            const container = document.getElementById("scheduleContainer");
+            container.innerHTML = JADWAL_DATA.map(item => `
+                <div class="schedule-card">
+                    <div class="schedule-day"><i class="fa-regular fa-calendar"></i> ${item.hari}</div>
+                    <div class="schedule-subject">${item.matkul}</div>
+                    <div class="schedule-meta">
+                        <span><i class="fa-regular fa-clock"></i> ${item.jam}</span>
+                        <span><i class="fa-solid fa-location-dot"></i> ${item.ruang} • ${item.sks} SKS</span>
+                    </div>
                 </div>
             `).join('');
         }
 
-        window.onload = initApp;
+        /* REALTIME TASKS (FIREBASE) */
+        function addTask(e) {
+            e.preventDefault();
+            const title = document.getElementById("taskTitle").value.trim();
+            const deadline = document.getElementById("taskDeadline").value;
+
+            const newRef = db.ref("tasks_26G").push();
+            newRef.set({ id: newRef.key, title, deadline, done: false }, () => {
+                document.getElementById("taskTitle").value = "";
+                document.getElementById("taskDeadline").value = "";
+            });
+        }
+
+        function toggleTask(id, currentStatus) {
+            db.ref("tasks_26G/" + id).update({ done: !currentStatus });
+        }
+
+        function deleteTask(id) {
+            db.ref("tasks_26G/" + id).remove();
+        }
+
+        db.ref("tasks_26G").on("value", snapshot => {
+            const container = document.getElementById("todoContainer");
+            const data = snapshot.val();
+            if(!data) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-muted);">Belum ada tugas tersimpan.</p>`;
+                return;
+            }
+            const list = Object.values(data).reverse();
+            container.innerHTML = list.map(t => `
+                <div class="todo-item ${t.done ? 'done' : ''}">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask('${t.id}', ${t.done})">
+                        <div>
+                            <span style="font-weight:700; font-size:14px;">${t.title}</span>
+                            <div style="font-size:11px; color:var(--text-muted);">Deadline: ${t.deadline}</div>
+                        </div>
+                    </div>
+                    <button class="btn-danger" onclick="deleteTask('${t.id}')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        });
+
+        /* REALTIME NOTES (FIREBASE) */
+        function addNote(e) {
+            e.preventDefault();
+            const title = document.getElementById("noteTitle").value.trim();
+            const body = document.getElementById("noteBody").value.trim();
+
+            const newRef = db.ref("notes_26G").push();
+            newRef.set({ id: newRef.key, title, body, time: new Date().toLocaleDateString('id-ID') }, () => {
+                document.getElementById("noteTitle").value = "";
+                document.getElementById("noteBody").value = "";
+            });
+        }
+
+        function deleteNote(id) {
+            db.ref("notes_26G/" + id).remove();
+        }
+
+        db.ref("notes_26G").on("value", snapshot => {
+            const container = document.getElementById("notesContainer");
+            const data = snapshot.val();
+            if(!data) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-muted);">Belum ada pengumuman.</p>`;
+                return;
+            }
+            const list = Object.values(data).reverse();
+            container.innerHTML = list.map(n => `
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <h4 style="font-weight:800; font-size:15px;">${n.title}</h4>
+                        <button class="btn-danger" onclick="deleteNote('${n.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <p style="font-size:13px; color:var(--text-main); white-space:pre-line; margin-bottom:10px;">${n.body}</p>
+                    <span style="font-size:11px; color:var(--text-muted);">${n.time}</span>
+                </div>
+            `).join('');
+        });
+
+        /* KALKULATOR IPK */
+        function renderIpkCalc() {
+            const container = document.getElementById("ipkCalcContainer");
+            container.innerHTML = JADWAL_DATA.map((item, idx) => `
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border-color);">
+                    <div style="font-size:13px; font-weight:700;">${item.matkul} (${item.sks} SKS)</div>
+                    <select class="form-control ipk-val" style="width:100px;" onchange="calculateIpk()">
+                        <option value="4.0">A (4.0)</option>
+                        <option value="3.7">A- (3.7)</option>
+                        <option value="3.3">B+ (3.3)</option>
+                        <option value="3.0" selected>B (3.0)</option>
+                        <option value="2.7">B- (2.7)</option>
+                        <option value="2.0">C (2.0)</option>
+                    </select>
+                </div>
+            `).join('');
+            calculateIpk();
+        }
+
+        function calculateIpk() {
+            const selects = document.querySelectorAll('.ipk-val');
+            let totalBobot = 0;
+            let totalSks = 0;
+
+            selects.forEach((select, idx) => {
+                const sks = JADWAL_DATA[idx].sks;
+                const nilai = parseFloat(select.value);
+                totalBobot += (sks * nilai);
+                totalSks += sks;
+            });
+
+            const ipk = (totalBobot / totalSks).toFixed(2);
+            document.getElementById("ipkResult").innerText = ipk;
+        }
+
+        /* DARK MODE TOGGLE */
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            const isDark = document.body.classList.contains("dark-mode");
+            document.getElementById("themeLabel").innerText = isDark ? "Mode Terang" : "Mode Gelap";
+        }
+
+        window.onload = function() {
+            renderSchedule();
+            renderIpkCalc();
+        };
     </script>
 </body>
 </html>
