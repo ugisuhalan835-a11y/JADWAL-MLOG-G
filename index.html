@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal & Absensi - S1 Manajemen Logistik 26G</title>
+    <title>Jadwal & Presensi Pengurus - S1 Manajemen Logistik 26G</title>
     <!-- Font & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,6 @@
             --primary: #4F46E5;
             --primary-hover: #4338CA;
             --primary-light: #EEF2FF;
-            --primary-border: #C7D2FE;
             --bg-body: #F8FAFC;
             --bg-card: #FFFFFF;
             --bg-sidebar: #FFFFFF;
@@ -28,76 +27,42 @@
             --border-color: #E2E8F0;
             --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
             --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
-            --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
             --radius-sm: 10px;
             --radius-md: 16px;
             --radius-lg: 24px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             --danger: #EF4444;
             --success: #10B981;
             --warning: #F59E0B;
-            --info: #3B82F6;
-            --wa-green: #25D366;
-        }
-
-        body.dark-mode {
-            --primary: #6366F1;
-            --bg-body: #0F172A;
-            --bg-card: #1E293B;
-            --bg-sidebar: #1E293B;
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --border-color: #334155;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; }
 
-        /* ==================== LOGIN SCREEN ==================== */
-        #loginOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #0F172A, #1E1B4B);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 9999; padding: 20px;
-        }
-
-        .login-card {
-            background-color: var(--bg-card); width: 100%; max-width: 400px;
-            padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
-            text-align: center;
-        }
-
-        .login-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; color: var(--text-main); }
-        .login-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
-
-        /* ==================== LAYOUT UTAMA ==================== */
-        .app-container { display: none; }
-        .app-container.active { display: flex; min-height: 100vh; }
-
+        /* SIDEBAR */
         .sidebar {
             width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
             display: flex; flex-direction: column; padding: 24px 16px; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100;
         }
 
         .brand { display: flex; align-items: center; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
-        .brand-icon { width: 40px; height: 40px; background: var(--primary); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: white; }
+        .brand-icon { width: 40px; height: 40px; background: var(--primary); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
 
         .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; flex: 1; }
         .nav-item button {
             width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: none;
             background: transparent; color: var(--text-muted); font-size: 14px; font-weight: 600;
-            border-radius: var(--radius-sm); cursor: pointer; text-align: left;
+            border-radius: var(--radius-sm); cursor: pointer; text-align: left; transition: all 0.2s;
         }
         .nav-item.active button { background-color: var(--primary); color: white; }
 
+        /* MAIN CONTENT */
         .main-wrapper { margin-left: 260px; flex: 1; padding: 28px 32px; width: calc(100% - 260px); }
         .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
 
         .tab-page { display: none; }
         .tab-page.active { display: block; }
 
-        /* ==================== FORM & TABLES ==================== */
-        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-bottom: 20px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
         .form-group { margin-bottom: 16px; text-align: left; }
         .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
         .form-control { width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); font-size: 14px; outline: none; }
@@ -114,6 +79,15 @@
         .badge-Izin { background: rgba(245,158,11,0.15); color: var(--warning); }
         .badge-Sakit { background: rgba(239,68,68,0.15); color: var(--danger); }
 
+        /* MODAL POPUP LOGIN PENGURUS */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card { background: var(--bg-card); width: 100%; max-width: 380px; padding: 28px; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--shadow-md); }
+
         @media (max-width: 768px) {
             .sidebar { display: none; }
             .main-wrapper { margin-left: 0; width: 100%; padding: 16px; }
@@ -122,123 +96,127 @@
 </head>
 <body>
 
-    <!-- ==================== SCREEN LOGIN ==================== -->
-    <div id="loginOverlay">
-        <div class="login-card">
-            <div class="brand-icon" style="margin: 0 auto 16px auto; width: 50px; height: 50px; font-size: 24px;">
-                <i class="fa-solid fa-lock"></i>
+    <!-- SIDEBAR NAVIGASI -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+            <div>
+                <h1 style="font-size: 15px; font-weight: 800;">LOGISTICS PLANNER</h1>
+                <p style="font-size: 11px; color: var(--text-muted);">ITL Trisakti • 26G</p>
             </div>
-            <h2>Akses Terbatas</h2>
-            <p>Masukkan username & password kelas MLOG 26G untuk melanjutkan.</p>
-            <form onsubmit="handleLogin(event)">
+        </div>
+
+        <ul class="nav-list">
+            <li class="nav-item active" data-tab="tab-jadwal">
+                <button><i class="fa-solid fa-calendar-days"></i> Jadwal Kuliah</button>
+            </li>
+            <li class="nav-item" data-tab="tab-absen">
+                <button><i class="fa-solid fa-user-shield"></i> Presensi Pengurus <i class="fa-solid fa-lock" style="font-size: 11px; margin-left: auto;"></i></button>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <main class="main-wrapper">
+        <header class="top-header">
+            <div>
+                <h2 style="font-size: 20px; font-weight: 800;">Portal MLOG 26G</h2>
+                <p style="font-size: 12px; color: var(--text-muted);">Sistem Informasi Perkuliahan & Absensi</p>
+            </div>
+            <div id="userStatusBadge" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Mode: Mahasiswa (Publik)</div>
+        </header>
+
+        <!-- TAB 1: JADWAL KULIAH (LANGSUNG DILIHAT MAHASISWA) -->
+        <section id="tab-jadwal" class="tab-page active">
+            <div class="card">
+                <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;"><i class="fa-solid fa-calendar-days"></i> Daftar Mata Kuliah Kelas 26G</h3>
+                <div id="jadwalList"></div>
+            </div>
+        </section>
+
+        <!-- TAB 2: ABSENSI (KHUSUS PENGURUS & KETUA KELAS) -->
+        <section id="tab-absen" class="tab-page">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 16px; font-weight: 800;"><i class="fa-solid fa-pen-to-square"></i> Fitur Presensi (Khusus Pengurus)</h3>
+                <button onclick="handleLogoutPengurus()" class="btn-danger" style="font-size: 12px;"><i class="fa-solid fa-right-from-bracket"></i> Keluar Sesi Pengurus</button>
+            </div>
+
+            <div class="card">
+                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Input Kehadiran Mahasiswa</h4>
+                <form onsubmit="submitAbsen(event)">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                        <div class="form-group">
+                            <label>Nama Mahasiswa</label>
+                            <input type="text" id="absenNama" class="form-control" placeholder="Nama Mahasiswa" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mata Kuliah</label>
+                            <select id="absenMatkul" class="form-control" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status Kehadiran</label>
+                            <select id="absenStatus" class="form-control" required>
+                                <option value="Hadir">Hadir</option>
+                                <option value="Izin">Izin</option>
+                                <option value="Sakit">Sakit</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary" style="margin-top: 8px;"><i class="fa-solid fa-paper-plane"></i> Simpan Presensi</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Rekap Presensi Kelas (Realtime Cloud)</h4>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Waktu / Tanggal</th>
+                                <th>Nama Mahasiswa</th>
+                                <th>Mata Kuliah</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableAbsenBody">
+                            <tr><td colspan="5" style="text-align:center;">Memuat data absensi...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL POPUP LOGIN KETUA / PENGURUS -->
+    <div class="modal-overlay" id="modalLoginPengurus">
+        <div class="modal-card">
+            <div class="brand-icon" style="margin: 0 auto 12px auto; width: 46px; height: 46px; font-size: 20px;">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">Akses Khusus Pengurus</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Hanya Ketua Kelas & Pengurus yang dapat mengakses fitur presensi.</p>
+            
+            <form onsubmit="handleLoginPengurus(event)">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="loginUser" class="form-control" placeholder="Masukkan username" required>
+                    <label>Username Pengurus</label>
+                    <input type="text" id="loginUser" class="form-control" placeholder="Username" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="loginPass" class="form-control" placeholder="Masukkan password" required>
+                    <input type="password" id="loginPass" class="form-control" placeholder="Password" required>
                 </div>
-                <p id="loginError" style="color: var(--danger); font-size: 12px; display: none; margin-bottom: 12px;">Username atau Password salah!</p>
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px;"><i class="fa-solid fa-right-to-bracket"></i> Masuk Sistem</button>
+                <p id="loginError" style="color: var(--danger); font-size: 12px; display: none; margin-bottom: 12px;">Username/Password Pengurus Salah!</p>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" onclick="cancelLoginPengurus()" class="btn-primary" style="background: var(--text-muted); width: 50%; justify-content: center;">Kembali</button>
+                    <button type="submit" class="btn-primary" style="width: 50%; justify-content: center;">Verifikasi</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- ==================== APLIKASI UTAMA ==================== -->
-    <div class="app-container" id="appMain">
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="brand-icon"><i class="fa-solid fa-boxes-packing"></i></div>
-                <div>
-                    <h1 style="font-size: 15px; font-weight: 800;">LOGISTICS PLANNER</h1>
-                    <p style="font-size: 11px; color: var(--text-muted);">ITL Trisakti • 26G</p>
-                </div>
-            </div>
-
-            <ul class="nav-list">
-                <li class="nav-item active" data-tab="tab-absen">
-                    <button><i class="fa-solid fa-clipboard-user"></i> Presensi / Absen</button>
-                </li>
-                <li class="nav-item" data-tab="tab-jadwal">
-                    <button><i class="fa-solid fa-calendar-days"></i> Jadwal Kuliah</button>
-                </li>
-            </ul>
-
-            <button onclick="handleLogout()" class="btn-primary" style="background: var(--danger); margin-top: auto; justify-content: center;"><i class="fa-solid fa-power-off"></i> Keluar</button>
-        </aside>
-
-        <!-- MAIN WRAPPER -->
-        <main class="main-wrapper">
-            <header class="top-header">
-                <div>
-                    <h2 style="font-size: 20px; font-weight: 800;">Portal MLOG 26G</h2>
-                    <p style="font-size: 12px; color: var(--text-muted);">Terhubung secara Realtime ke Firebase</p>
-                </div>
-                <div style="font-size: 13px; font-weight: 700; color: var(--primary);" id="currentUserBadge">User: -</div>
-            </header>
-
-            <!-- TAB 1: ABSENSI -->
-            <section id="tab-absen" class="tab-page active">
-                <div class="card">
-                    <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 16px;"><i class="fa-solid fa-pen-to-square"></i> Form Isi Kehadiran</h3>
-                    <form onsubmit="submitAbsen(event)">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-                            <div class="form-group">
-                                <label>Nama Mahasiswa</label>
-                                <input type="text" id="absenNama" class="form-control" placeholder="Nama Lengkap" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Mata Kuliah</label>
-                                <select id="absenMatkul" class="form-control" required></select>
-                            </div>
-                            <div class="form-group">
-                                <label>Status Kehadiran</label>
-                                <select id="absenStatus" class="form-control" required>
-                                    <option value="Hadir">Hadir</option>
-                                    <option value="Izin">Izin</option>
-                                    <option value="Sakit">Sakit</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-primary" style="margin-top: 8px;"><i class="fa-solid fa-paper-plane"></i> Kirim Absen</button>
-                    </form>
-                </div>
-
-                <div class="card">
-                    <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;"><i class="fa-solid fa-list-check"></i> Rekap Presensi Kelas (Realtime)</h3>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Waktu / Tanggal</th>
-                                    <th>Nama Mahasiswa</th>
-                                    <th>Mata Kuliah</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableAbsenBody">
-                                <tr><td colspan="5" style="text-align:center;">Memuat data absensi...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TAB 2: JADWAL KULIAH -->
-            <section id="tab-jadwal" class="tab-page">
-                <div class="card">
-                    <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;"><i class="fa-solid fa-calendar-days"></i> Daftar Mata Kuliah 26G</h3>
-                    <div id="jadwalList"></div>
-                </div>
-            </section>
-        </main>
-    </div>
-
     <script>
-        /* ==================== 1. KONFIGURASI FIREBASE ==================== */
+        /* CONFIG FIREBASE */
         const firebaseConfig = {
             apiKey: "AIzaSyDnjVASOzIExdzMSqsxplMXCF3UQIwZkmo",
             authDomain: "jadwal-mata-kuliah-bebf8.firebaseapp.com",
@@ -252,12 +230,10 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        /* ==================== 2. KREDENSIAL LOGIN ==================== */
-        // Kamu bisa menambah atau mengganti Username & Password di bawah ini
-        const USER_CREDENTIALS = {
-            "ugi": "26glogistik",
-            "admin": "mlog2026",
-            "mahasiswa": "123456"
+        /* KREDENSIAL LOGIN KHUSUS KETUA & PENGURUS */
+        const PENGURUS_CREDENTIALS = {
+            "ugi": "26glogistik",   // Username Ketua Kelas
+            "admin": "mlog2026"     // Username Pengurus Kelas
         };
 
         const DEFAULT_MATKUL = [
@@ -271,57 +247,67 @@
             "Pengantar Logistik"
         ];
 
-        /* ==================== 3. KONTROL LOGIN ==================== */
-        function checkSession() {
-            const loggedUser = sessionStorage.getItem("logged_user");
-            if (loggedUser) {
-                document.getElementById("loginOverlay").style.display = "none";
-                document.getElementById("appMain").classList.add("active");
-                document.getElementById("currentUserBadge").innerText = `User: ${loggedUser}`;
-                initApp();
-            }
+        /* AKSED DAN NAVIGASI */
+        document.querySelectorAll(".nav-item button").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const target = this.parentElement.getAttribute("data-tab");
+
+                if (target === "tab-absen") {
+                    const isPengurusLoggedIn = sessionStorage.getItem("pengurus_logged_user");
+                    if (!isPengurusLoggedIn) {
+                        document.getElementById("modalLoginPengurus").classList.add("active");
+                        return;
+                    }
+                }
+
+                switchTab(target);
+            });
+        });
+
+        function switchTab(target) {
+            document.querySelectorAll(".nav-item, .tab-page").forEach(el => el.classList.remove("active"));
+            document.querySelector(`[data-tab="${target}"]`).classList.add("active");
+            document.getElementById(target).classList.add("active");
+
+            const loggedUser = sessionStorage.getItem("pengurus_logged_user");
+            document.getElementById("userStatusBadge").innerText = loggedUser ? `Sesi Pengurus: ${loggedUser}` : "Mode: Mahasiswa (Publik)";
         }
 
-        function handleLogin(e) {
+        /* LOGIN LOGIC PENGURUS */
+        function handleLoginPengurus(e) {
             e.preventDefault();
             const u = document.getElementById("loginUser").value.trim();
             const p = document.getElementById("loginPass").value.trim();
 
-            if (USER_CREDENTIALS[u] && USER_CREDENTIALS[u] === p) {
-                sessionStorage.setItem("logged_user", u);
+            if (PENGURUS_CREDENTIALS[u] && PENGURUS_CREDENTIALS[u] === p) {
+                sessionStorage.setItem("pengurus_logged_user", u);
                 document.getElementById("loginError").style.display = "none";
-                checkSession();
+                document.getElementById("modalLoginPengurus").classList.remove("active");
+                switchTab("tab-absen");
             } else {
                 document.getElementById("loginError").style.display = "block";
             }
         }
 
-        function handleLogout() {
-            sessionStorage.removeItem("logged_user");
-            location.reload();
+        function cancelLoginPengurus() {
+            document.getElementById("modalLoginPengurus").classList.remove("active");
+            document.getElementById("loginError").style.display = "none";
         }
 
-        /* ==================== 4. SYSTEM NAVIGATION ==================== */
-        document.querySelectorAll(".nav-item button").forEach(btn => {
-            btn.addEventListener("click", function() {
-                const target = this.parentElement.getAttribute("data-tab");
-                document.querySelectorAll(".nav-item, .tab-page").forEach(el => el.classList.remove("active"));
-                this.parentElement.classList.add("active");
-                document.getElementById(target).classList.add("active");
-            });
-        });
+        function handleLogoutPengurus() {
+            sessionStorage.removeItem("pengurus_logged_user");
+            switchTab("tab-jadwal");
+            alert("Keluar dari sesi Pengurus.");
+        }
 
-        /* ==================== 5. INTEGRASI FIREBASE ABSENSI ==================== */
+        /* INTEGRASI DATABASE REALTIME ABSENSI */
         function initApp() {
             populateMatkulOptions();
-            
-            // Sync Realtime Absensi dari Firebase
-            db.ref("absensi_26G").on("value", (snapshot) => {
-                const data = snapshot.val();
-                renderAbsenTable(data);
-            });
-
             renderJadwalView();
+
+            db.ref("absensi_26G").on("value", (snapshot) => {
+                renderAbsenTable(snapshot.val());
+            });
         }
 
         function populateMatkulOptions() {
@@ -347,14 +333,14 @@
                 status: status
             }, (error) => {
                 if (!error) {
-                    alert("Absensi berhasil dikirim!");
+                    alert("Presensi berhasil disimpan!");
                     document.getElementById("absenNama").value = "";
                 }
             });
         }
 
         function deleteAbsen(id) {
-            if (confirm("Hapus catatan absensi ini?")) {
+            if (confirm("Hapus catatan presensi ini?")) {
                 db.ref("absensi_26G/" + id).remove();
             }
         }
@@ -362,7 +348,7 @@
         function renderAbsenTable(data) {
             const tbody = document.getElementById("tableAbsenBody");
             if (!data) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Belum ada data absensi terisi.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Belum ada data presensi terisi.</td></tr>`;
                 return;
             }
 
@@ -387,8 +373,7 @@
             `).join('');
         }
 
-        // Jalankan pengecekan sesi saat halaman dibuka
-        window.onload = checkSession;
+        window.onload = initApp;
     </script>
 </body>
 </html>
